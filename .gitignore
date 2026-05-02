@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# Virtual environment
+.venv/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Environment variables
+.env
+.env.*
+
+# Runtime database
+*.db
+
+# OSM graph data (regenerated via osmnx)
+app/simulation/data/
+
+# Routing cache (regenerated at runtime)
+cache/
+
+# OS
+.DS_Store
+Thumbs.db
+
+next_steps.md
+infos.md
+planing.md
+question.md
+data_model.md
+data.md
+a_agent_test.py

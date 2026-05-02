@@ -1,0 +1,6 @@
+SQLAlchemy~=2.0.49
+fastapi
+uvicorn[standard]
+pydantic
+openai
+python-dotenv
