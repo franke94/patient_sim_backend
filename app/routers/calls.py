@@ -4,9 +4,9 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.database import get_db
-from app.models import Call, Case
+from app.models import Call, Case, CallFeedback
 from app.models.enums import CallStatusEnum
-from app.schemas import CallCreate, CallDetailRead, CallPatchEntries, CallRead, CallSummaryRead
+from app.schemas import CallCreate, CallDetailRead, CallPatchEntries, CallRead, CallSummaryRead, CallFeedbackRead, CallFeedbackCreate
 
 router = APIRouter(prefix="/calls", tags=["calls"])
 
@@ -17,7 +17,7 @@ def create_call(payload: CallCreate, db: Session = Depends(get_db)) -> Call:
     if case is None:
         raise HTTPException(status_code= 404, detail="Case not found")
 
-    call = Call(case_id=case.id, status=CallStatusEnum.RUNNING)
+    call = Call(case_id=case.id, status=CallStatusEnum.RUNNING, language=case.language)
     db.add(call)
     db.commit()
     db.refresh(call)
@@ -78,9 +78,38 @@ def list_calls(db: Session = Depends(get_db)) -> list[CallSummaryRead]:
             id=c.id,
             case_id=c.case_id,
             case_title=c.case.title,
+            language=c.language,
             status=c.status,
             started_at=c.started_at,
             finished_at=c.finished_at
         )
         for c in calls
     ]
+
+@router.post(
+    "/{call_id}/feedback",
+    response_model=CallFeedbackRead,
+    status_code=status.HTTP_201_CREATED,
+)
+def create_call_feedback(
+    call_id: int,
+    payload: CallFeedbackCreate,
+    db: Session = Depends(get_db),
+) -> CallFeedback:
+    """Legt eine Feedback-Row fuer den Call an. Pro Call genau einmal moeglich."""
+    call = db.get(Call, call_id)
+    if call is None:
+        raise HTTPException(status_code=404, detail="Call not found")
+
+    # 1:1 — kein zweites Feedback pro Call
+    if call.feedback is not None:
+        raise HTTPException(
+            status_code=409,
+            detail="Feedback already exists for this call",
+        )
+
+    feedback = CallFeedback(call_id=call.id, **payload.model_dump())
+    db.add(feedback)
+    db.commit()
+    db.refresh(feedback)
+    return feedback

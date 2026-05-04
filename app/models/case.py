@@ -2,6 +2,8 @@ from datetime import datetime
 from sqlalchemy import String, Text, Float, DateTime, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import TYPE_CHECKING
+from app.models.enums import LanguageEnum
+from sqlalchemy import Enum as SQLEnum
 
 if TYPE_CHECKING:
     from app.models.call import Call
@@ -36,4 +38,6 @@ class Case(Base):
     #Forward Reference auf die assessments,
     abcde_assessments: Mapped[list["ABCDEAssessment"]] = relationship(back_populates="case")
     injury_assessments: Mapped[list["InjuryAssessment"]] = relationship(back_populates="case")
+
+    language: Mapped[LanguageEnum] = mapped_column(SQLEnum(LanguageEnum), server_default=LanguageEnum.DE.value, default=LanguageEnum.DE)
 

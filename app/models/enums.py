@@ -57,3 +57,18 @@ class AgentRunStatusEnum(str, Enum):
     SUCCESS = "success"
     FAILED = "failed"
 
+#Erweiterung fürs Feedback
+class QualificationEnum(str, Enum):
+    KEINE = "keine"
+    SANHELFER = "sanhelfer"
+    RH = "rh"
+    RS = "rs"
+    RA = "ra"
+    NFS = "nfs"
+    NA = "na"
+    SONSTIGE = "sonstige"
+
+
+class LanguageEnum(str, Enum):
+    DE = "de"
+    EN = "en"

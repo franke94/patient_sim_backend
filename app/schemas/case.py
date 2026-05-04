@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict
+from app.models.enums import LanguageEnum
 
 class CaseCreate(BaseModel):
     title: str
@@ -18,6 +19,7 @@ class CaseRead(BaseModel):
 
     id: int
     title: str
+    language: LanguageEnum
     address: str
     gps_lat: float
     gps_lng: float

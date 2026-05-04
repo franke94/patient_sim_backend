@@ -18,7 +18,9 @@ def get_llm_client() -> LLMClient:
     if provider == "anthropic":
         from app.simulation.llm.anthropic_client import AnthropicClient
         return AnthropicClient()
-
+    if provider == "lmstudio":
+        from app.simulation.llm.lmstudio_client import LMStudioClient
+        return LMStudioClient()
     raise LLMError(f"Unknown LLM_Provider")
 
 

@@ -9,6 +9,7 @@ from app.schemas.assessment import (
     InjuryAssessmentRead,
 )
 from app.schemas.agent import AgentRunRead
+from app.schemas.feedback import CallFeedbackCreate, CallFeedbackRead
 
 
 __all__ = [
@@ -17,5 +18,6 @@ __all__ = [
     "ChatMessageCreate", "ChatMessageRead",
     "ABCDEAssessmentCreate", "ABCDEAssessmentRead",
     "Injury", "InjuryAssessmentCreate", "InjuryAssessmentRead",
-    "AgentRunRead", CallSummaryRead
+    "AgentRunRead", "CallSummaryRead",
+    "CallFeedbackCreate", "CallFeedbackRead"
 ]

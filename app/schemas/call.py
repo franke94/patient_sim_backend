@@ -1,6 +1,6 @@
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict
-from app.models.enums import CallStatusEnum
+from app.models.enums import CallStatusEnum, LanguageEnum
 from app.schemas.chat import ChatMessageRead
 from app.schemas.assessment import ABCDEAssessmentRead, InjuryAssessmentRead
 from app.schemas.agent import AgentRunRead
@@ -22,6 +22,7 @@ class CallRead(BaseModel):
     id: int
     case_id: int
     status: CallStatusEnum
+    language: LanguageEnum
     started_at: datetime
     finished_at: datetime | None
     address_entered: str | None
@@ -43,6 +44,7 @@ class CallSummaryRead(BaseModel):
     id: int
     case_id: int
     case_title: str
+    language: LanguageEnum
     status: CallStatusEnum
     started_at: datetime
     finished_at: datetime | None

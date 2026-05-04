@@ -4,6 +4,7 @@ from app.models.call import Call
 from app.models.assessment import ABCDEAssessment, InjuryAssessment
 from app.models.chat import ChatMessage
 from app.models.agent import AgentRun
+from app.models.feedback import CallFeedback
 
 __all__ = [
     "Case",

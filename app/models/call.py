@@ -11,9 +11,10 @@ if TYPE_CHECKING:
     from app.models.assessment import ABCDEAssessment, InjuryAssessment
     from app.models.chat import ChatMessage
     from app.models.agent import AgentRun
+    from app.models.feedback import CallFeedback
 
 from app.database import Base
-from app.models.enums import CallStatusEnum
+from app.models.enums import CallStatusEnum, LanguageEnum
 
 
 # Hinweis: text ist nicht längenbeschränkt, String(255) kann 255 char
@@ -33,7 +34,7 @@ class Call(Base):
         SQLEnum(CallStatusEnum),
         default=CallStatusEnum.RUNNING
     )
-
+    language: Mapped[LanguageEnum] = mapped_column(SQLEnum(LanguageEnum), server_default=LanguageEnum.DE.value, default=LanguageEnum.DE)
     started_at: Mapped[datetime]= mapped_column(
         DateTime, server_default=func.now()
     )
@@ -54,3 +55,7 @@ class Call(Base):
     )
 
     agent_runs: Mapped[list["AgentRun"]] = relationship(back_populates= "call")
+
+    feedback: Mapped["CallFeedback | None"] = relationship(
+        back_populates="call",uselist=False
+    )
