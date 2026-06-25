@@ -65,3 +65,20 @@ class InjuryAssessmentRead(BaseModel):
     injuries: list[Injury]
     agent_run_id: int | None
     created_at: datetime
+
+class AddressAssessmentRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: int; call_id: int; agent_run_id: int | None
+    source: SourceEnum
+    address_candidates: list[dict]
+    matched_addresses: list[dict]
+    created_at: datetime
+
+class OnSceneAssessmentRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: int; call_id: int; agent_run_id: int | None
+    source: SourceEnum
+    findings: list[str]
+    onscene_status: str
+    confidence: float | None
+    created_at: datetime

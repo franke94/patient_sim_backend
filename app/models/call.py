@@ -8,13 +8,14 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from app.models.case import Case
-    from app.models.assessment import ABCDEAssessment, InjuryAssessment
+    from app.models.assessment import ABCDEAssessment, InjuryAssessment, AddressAssessment, OnSceneAssessment
     from app.models.chat import ChatMessage
     from app.models.agent import AgentRun
     from app.models.feedback import CallFeedback
 
 from app.database import Base
 from app.models.enums import CallStatusEnum, LanguageEnum
+from app.models.plausibility_result import PlausibilityResult
 
 
 # Hinweis: text ist nicht längenbeschränkt, String(255) kann 255 char
@@ -43,10 +44,15 @@ class Call(Base):
     address_entered: Mapped[str | None] = mapped_column(String(500))
     patient_name_entered: Mapped[str | None] = mapped_column(String(255))
     caller_name_entered: Mapped[str | None] = mapped_column(String(255))
+    city_entered: Mapped[str | None] = mapped_column(String(255))
+    street_entered: Mapped[str | None] = mapped_column(String(255))
+    housenumber_entered: Mapped[str | None] = mapped_column(String(50))
 
     #Forward Reference auf die assessments
     abcde_assessments: Mapped[list["ABCDEAssessment"]] = relationship(back_populates="call")
     injury_assessments: Mapped[list["InjuryAssessment"]] = relationship(back_populates="call")
+    address_assessments: Mapped[list["AddressAssessment"]] = relationship(back_populates="call")
+    onscene_assessments: Mapped[list["OnSceneAssessment"]] = relationship(back_populates="call")
 
     #Reference auf einzelne Messages
     messages: Mapped[list["ChatMessage"]] = relationship(
@@ -59,3 +65,5 @@ class Call(Base):
     feedback: Mapped["CallFeedback | None"] = relationship(
         back_populates="call",uselist=False
     )
+
+    plausibility_results: Mapped[list["PlausibilityResult"]] = relationship(back_populates="call")

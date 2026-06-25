@@ -35,6 +35,8 @@ class AgentTypeEnum(str, Enum):
     LOCATION_AGENT = "location_agent"
     INJURY_AGENT = "injury_agent"
     SINGLE_AGENT = "single_agent"
+    ADDRESS_AGENT = "address_agent"
+    ON_SCENE_AGENT = "on_scene_agent"
 
 
 class MessageRoleEnum(str, Enum):
@@ -72,3 +74,9 @@ class QualificationEnum(str, Enum):
 class LanguageEnum(str, Enum):
     DE = "de"
     EN = "en"
+
+class AMLAccuracyEnum(str, Enum):
+    HIGH_ACCURACY = "high_accuracy"
+    MEDIUM_ACCURACY = "medium_accuracy"
+    LOW_ACCURACY = "low_accuracy"
+    VERY_LOW_ACCURACY = "very_low_accuracy"

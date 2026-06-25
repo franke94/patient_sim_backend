@@ -5,6 +5,10 @@ from app.simulation.agents.single_agent import SingleAgent
 
 from app.simulation.agents.abcde_agents import make_abcde_agent
 
+from app.simulation.agents.address_agent import AddressAgent
+from app.simulation.agents.on_scene_agent import OnSceneAgent
+
+
 AGENT_REGISTRY = {
     AgentTypeEnum.A_AGENT: make_abcde_agent(AgentTypeEnum.A_AGENT),
     AgentTypeEnum.B_AGENT: make_abcde_agent(AgentTypeEnum.B_AGENT),
@@ -12,7 +16,9 @@ AGENT_REGISTRY = {
     AgentTypeEnum.D_AGENT: make_abcde_agent(AgentTypeEnum.D_AGENT),
     AgentTypeEnum.E_AGENT: make_abcde_agent(AgentTypeEnum.E_AGENT),
     AgentTypeEnum.LOCATION_AGENT: LocationAgent,
-    AgentTypeEnum.SINGLE_AGENT: SingleAgent
+    AgentTypeEnum.SINGLE_AGENT: SingleAgent,
+    AgentTypeEnum.ADDRESS_AGENT: AddressAgent,
+    AgentTypeEnum.ON_SCENE_AGENT: OnSceneAgent,
 }
 
 

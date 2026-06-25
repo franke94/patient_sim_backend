@@ -2,8 +2,11 @@ from datetime import datetime
 from pydantic import BaseModel, ConfigDict
 from app.models.enums import CallStatusEnum, LanguageEnum
 from app.schemas.chat import ChatMessageRead
-from app.schemas.assessment import ABCDEAssessmentRead, InjuryAssessmentRead
+from app.schemas.assessment import ABCDEAssessmentRead, InjuryAssessmentRead, AddressAssessmentRead, \
+    OnSceneAssessmentRead
 from app.schemas.agent import AgentRunRead
+from app.schemas.location import PlausibilityResultRead
+
 
 class CallCreate(BaseModel):
     case_id: int
@@ -14,6 +17,9 @@ class CallPatchEntries(BaseModel):
     address_entered: str | None = None
     patient_name_entered: str | None = None
     caller_name_entered: str | None = None
+    city_entered: str | None = None
+    street_entered: str | None = None
+    housenumber_entered: str | None = None
 
 
 class CallRead(BaseModel):
@@ -28,6 +34,9 @@ class CallRead(BaseModel):
     address_entered: str | None
     patient_name_entered: str | None
     caller_name_entered: str | None
+    city_entered: str | None
+    street_entered: str | None
+    housenumber_entered: str | None
 
 
 class CallDetailRead(CallRead): #Vererbung von der Klasse CallRead, ermögtlicht eine Detailierte Ansicht
@@ -35,6 +44,9 @@ class CallDetailRead(CallRead): #Vererbung von der Klasse CallRead, ermögtlicht
     messages: list[ChatMessageRead] = []
     abcde_assessments: list[ABCDEAssessmentRead] = []
     injury_assessments: list[InjuryAssessmentRead] = []
+    address_assessments: list[AddressAssessmentRead] = []
+    onscene_assessments: list[OnSceneAssessmentRead] = []
+    plausibility_results: list[PlausibilityResultRead] = []
     agent_runs: list[AgentRunRead] = []
 
 

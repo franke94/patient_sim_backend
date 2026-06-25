@@ -1,7 +1,7 @@
 from datetime import datetime
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
-from sqlalchemy import String, DateTime, ForeignKey, Enum as SQLEnum, JSON, func
+from sqlalchemy import String, DateTime, ForeignKey, Enum as SQLEnum, JSON, func, Float
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
@@ -55,3 +55,29 @@ class InjuryAssessment(Base):
     case: Mapped["Case | None"] = relationship(back_populates="injury_assessments")
     call: Mapped["Call | None"] = relationship(back_populates="injury_assessments")
     agent_run: Mapped["AgentRun | None"] = relationship(back_populates="injury_assessments")
+
+class AddressAssessment(Base):
+    __tablename__ = "address_assessments"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    call_id: Mapped[int] = mapped_column(ForeignKey("calls.id"))
+    agent_run_id: Mapped[Optional[int]] = mapped_column(ForeignKey("agent_runs.id"), nullable=True)
+    source: Mapped[SourceEnum] = mapped_column(SQLEnum(SourceEnum), default=SourceEnum.AI_AGENT)
+    address_candidates: Mapped[list] = mapped_column(JSON, default=list)   # roher LLM-Output
+    matched_addresses: Mapped[list] = mapped_column(JSON, default=list)    # nach DB-Match + Distanz
+    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
+    call: Mapped["Call"] = relationship(back_populates="address_assessments")
+    agent_run: Mapped[Optional["AgentRun"]] = relationship()
+
+
+class OnSceneAssessment(Base):
+    __tablename__ = "onscene_assessments"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    call_id: Mapped[int] = mapped_column(ForeignKey("calls.id"))
+    agent_run_id: Mapped[Optional[int]] = mapped_column(ForeignKey("agent_runs.id"), nullable=True)
+    source: Mapped[SourceEnum] = mapped_column(SQLEnum(SourceEnum), default=SourceEnum.AI_AGENT)
+    findings: Mapped[list] = mapped_column(JSON, default=list)   # zitierte Belege
+    onscene_status: Mapped[str] = mapped_column(String(20))      # yes | no | unknown
+    confidence: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
+    call: Mapped["Call"] = relationship(back_populates="onscene_assessments")
+    agent_run: Mapped[Optional["AgentRun"]] = relationship()

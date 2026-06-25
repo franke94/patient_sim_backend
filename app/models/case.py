@@ -1,9 +1,13 @@
 from datetime import datetime
 from sqlalchemy import String, Text, Float, DateTime, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 from app.models.enums import LanguageEnum
 from sqlalchemy import Enum as SQLEnum
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import relationship
+from app.models.enums import AMLAccuracyEnum
+from app.models.address_db import AddressDB
 
 if TYPE_CHECKING:
     from app.models.call import Call
@@ -23,9 +27,12 @@ class Case(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     title: Mapped[str] = mapped_column(String(255))
     case_description: Mapped[str] = mapped_column(Text)
-    address: Mapped[str] = mapped_column(String(500))  #ToDo: Addresse sollte noch ein besseres Format werden
-    gps_lat: Mapped[float] = mapped_column(Float)
-    gps_lng: Mapped[float] = mapped_column(Float)
+    gold_address_id: Mapped[int] = mapped_column(ForeignKey("addresses.id"))
+    aml_lat: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+    aml_lon: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+    aml_accuracy: Mapped[Optional[AMLAccuracyEnum]] = mapped_column(
+        SQLEnum(AMLAccuracyEnum), nullable=True
+    )
     patient_name: Mapped[str] = mapped_column(String(255))
     caller_name: Mapped[str] = mapped_column(String(255))
     caller_prompt: Mapped[str] = mapped_column(Text)
@@ -41,3 +48,5 @@ class Case(Base):
 
     language: Mapped[LanguageEnum] = mapped_column(SQLEnum(LanguageEnum), server_default=LanguageEnum.DE.value, default=LanguageEnum.DE)
 
+    #Neue Relationship
+    gold_address: Mapped["AddressDB"] = relationship()
