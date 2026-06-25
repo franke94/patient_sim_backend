@@ -74,6 +74,7 @@ class QualificationEnum(str, Enum):
 class LanguageEnum(str, Enum):
     DE = "de"
     EN = "en"
+    FR = "fr"
 
 class AMLAccuracyEnum(str, Enum):
     HIGH_ACCURACY = "high_accuracy"
