@@ -20,3 +20,4 @@ Ist die KI Unterstützung plausible nachvollziehabr?
 Hat man sich mit Infos überfrachtet gefühlt oder hat man das Gefühl zu wenig infos zu bekommen? 
 Weitere KI-Tools die Helfen könnten? 
 
+Bessere Erklärungen beim Score Panel, z.B. Distance AML un d die Accuracy anzeigen 

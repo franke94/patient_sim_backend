@@ -47,7 +47,7 @@ def post_message(
     db.flush() # user_msg gets ID + appears in call.messages for run_caller_turn
     #Flush schiebt Änderungen ans DB Backend ohne zu kommitten, damit lässt sich die message order korrekt ermitteln
     try:
-        caller_msg = run_caller_turn(call, db)
+        caller_msg = run_caller_turn(call, db, transcription=payload.transcription)
     except LLMError as exc:
         db.rollback() #User Message verwerfen
         raise HTTPException(

@@ -23,14 +23,32 @@ def _to_llm_messages(messages: list[ChatMessage]) -> list[LLMMessage]:
     ordered = sorted(messages, key = lambda m: m.order_index)
     return [LLMMessage(role=m.role.value, content=m.content) for m in ordered]
 
-def run_caller_turn(call: Call, db: Session) -> ChatMessage:
+
+# Anweisung, damit der Caller seine Antworten direkt mit ASR-typischen Fehlern erzeugt
+# (kein separates Transkriptions-Modell nötig).
+TRANSCRIPTION_INSTRUCTION = (
+    "\n\nTRANSKRIPTIONS-MODUS: Deine Antworten sollen klingen, als wären sie von einer "
+    "automatischen Spracherkennung aus einer Audioaufnahme transkribiert worden. "
+    "Schreibe Eigennamen sowie Straßen- und Ortsnamen phonetisch ähnlich, aber falsch "
+    "(z.B. 'Merzig' -> 'Mörzig', 'Schmidt' -> 'Schmitt'). "
+    "Schreibe Zahlen als Wörter aus (z.B. '15' -> 'fünfzehn'). "
+    "Verändere nur die Schreibweise dieser Begriffe, nicht den Inhalt oder die Struktur. "
+    "Antworte weiterhin in derselben Sprache."
+)
+
+
+def run_caller_turn(call: Call, db: Session, transcription: bool = False) -> ChatMessage:
     """Generiert die nächste Anrufer-Nachricht für den gegebenen Call """
     #system_prompt = _build_system_prompt(call.case)
 
     history = _to_llm_messages(call.messages)
 
+    system_prompt = call.case.caller_prompt
+    if transcription:
+        system_prompt = system_prompt + TRANSCRIPTION_INSTRUCTION
+
     client = get_llm_client()
-    result = client.chat(call.case.caller_prompt, history)
+    result = client.chat(system_prompt, history)
     reply_text = result.text
 
     last_order = max((m.order_index for m in call.messages), default=-1)

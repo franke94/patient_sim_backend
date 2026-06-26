@@ -6,6 +6,7 @@ from app.models.enums import MessageRoleEnum
 class ChatMessageCreate(BaseModel):
     """POST /calls/{id}/messages -> Deshlab muss keine call_id mitgegeben werden"""
     content: str
+    transcription: bool = False   # Caller-Antwort mit simulierten Transkriptionsfehlern
 
 
 class ChatMessageRead(BaseModel):
